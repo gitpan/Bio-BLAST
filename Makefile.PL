@@ -30,6 +30,7 @@ my %WriteMakefileArgs = (
   'NAME' => 'Bio::BLAST',
   'PREREQ_PM' => {
     'Bio::PrimarySeq' => '0',
+    'Bio::PrimarySeqI' => '0',
     'Bio::Seq::LargePrimarySeq' => '0',
     'Carp' => '0',
     'Class::Accessor::Fast' => '0',
@@ -44,9 +45,10 @@ my %WriteMakefileArgs = (
     'List::MoreUtils' => '0',
     'List::Util' => '0',
     'Memoize' => '0',
-    'POSIX' => '0'
+    'POSIX' => '0',
+    'namespace::autoclean' => '0'
   },
-  'VERSION' => '0.1',
+  'VERSION' => '0.2',
   'test' => {
     'TESTS' => 't/*.t'
   }

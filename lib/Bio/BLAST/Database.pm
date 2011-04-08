@@ -3,12 +3,13 @@ BEGIN {
   $Bio::BLAST::Database::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::BLAST::Database::VERSION = '0.1';
+  $Bio::BLAST::Database::VERSION = '0.2';
 }
 # ABSTRACT: work with formatted BLAST databases
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use POSIX;
 
@@ -29,8 +30,7 @@ use IPC::System::Simple 'systemx';
 use List::Util qw/ min max /;
 use List::MoreUtils qw/ all any /;
 
-use Bio::PrimarySeq;
-use Bio::Seq::LargePrimarySeq;
+use Bio::BLAST::Database::Seq;
 
 
 use base qw/ Class::Accessor::Fast /;
@@ -437,39 +437,17 @@ __PACKAGE__->mk_accessors('sequences_count');
 sub get_sequence {
     my ($self, $seqname) = @_;
 
-    croak "cannot call get_sequence on an incomplete database!" unless $self->files_are_complete;
-    croak "cannot get_sequence on a database that has not been indexed for retrieval!" unless $self->indexed_seqs;
+    croak "cannot call get_sequence on an incomplete database!"
+        unless $self->files_are_complete;
 
-    my $ffbn = $self->full_file_basename;
-    my $s = `fastacmd -d '$ffbn' -s '$seqname' 2>&1`;
-    return if $s =~ /ERROR:\s+Entry\s*"[^"]+"\s+not found/;
+    croak "cannot call get_sequence on a database that has not been indexed for retrieval!"
+        unless $self->indexed_seqs;
 
-    # extract defline and sequence NOT using regular expressions -
-    # which are too slow - and sometimes fail - for large sequences
-    #
-    my $defline = substr($s, 0, index($s, "\n"));
-    my $seq = substr($s, index($s, "\n")+1);
-
-
-    my ($id,$def) = $defline  =~ m(
-                >(?:lcl\|)?(\S+)\s+(.*)
-               )x
-       or die "could not parse fastacmd output\n:$s";
-
-    $seq =~ s/\s//g; #remove whitespace from the seq
-
-    my $seq_type = length $seq > 2**10
-        ? 'Bio::Seq::LargePrimarySeq'
-        : 'Bio::PrimarySeq';
-
-    eval "require $seq_type";
-
-    return $seq_type->new( -id => $id,
-                           -seq => $seq,
-                           -desc => $def,
-                          );
+    return Bio::BLAST::Database::Seq->new(
+        -bdb => $self,
+        -id  => $seqname,
+        );
 }
-
 
 # internal function to set the title, sequence count, type,
 # format_time, and indexed_seqs from the set of files on disk and from
@@ -761,7 +739,7 @@ at the existing files and sets this
   Usage: my $seq = $fs->get_sequence('LE_HBa0001A02');
   Desc : get a particular sequence from this db
   Args : sequence name to retrieve
-  Ret  : Bio::PrimarySeqI object, or nothing if not found
+  Ret  : Bio::PrimarySeqI-implementing object, or nothing if not found
   Side Effects: dies on error
 
 =head1 BASE CLASS(ES)

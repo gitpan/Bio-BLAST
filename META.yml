@@ -22,6 +22,7 @@ meta-spec:
 name: Bio-BLAST
 requires:
   Bio::PrimarySeq: 0
+  Bio::PrimarySeqI: 0
   Bio::Seq::LargePrimarySeq: 0
   Carp: 0
   Class::Accessor::Fast: 0
@@ -37,11 +38,12 @@ requires:
   List::Util: 0
   Memoize: 0
   POSIX: 0
+  namespace::autoclean: 0
 resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=Bio-BLAST
   homepage: http://search.cpan.org/dist/Bio-BLAST
   repository: http://github.com/solgenomics/bio-blast
-version: 0.1
+version: 0.2
 x_Dist_Zilla:
   plugins:
     -
