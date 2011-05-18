@@ -6,7 +6,7 @@ BEGIN {
   $Bio::BLAST::Database::Seq::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::BLAST::Database::Seq::VERSION = '0.2';
+  $Bio::BLAST::Database::Seq::VERSION = '0.3';
 }
 
 # ABSTRACT: lazy-loading sequence from a BLAST database
@@ -166,6 +166,8 @@ sub _parse_defline {
                                           >(?:lcl\|)?(\S+) \s+ (.*)
                                         )x
                or die "could not parse fastacmd output\n:$defline";
+
+    undef $defline if $defline =~ /^No definition line found\.?$/;
 
     return ( $id, $defline );
 }

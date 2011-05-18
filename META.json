@@ -38,7 +38,7 @@
             "List::Util" : 0,
             "Memoize" : 0,
             "POSIX" : 0,
-            "namespace::autoclean" : 0
+            "namespace::clean" : 0
          }
       },
       "test" : {
@@ -67,7 +67,7 @@
          "web" : "http://github.com/rbuels/bio-blast"
       }
    },
-   "version" : "0.2",
+   "version" : "0.3",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

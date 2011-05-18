@@ -3,13 +3,12 @@ BEGIN {
   $Bio::BLAST::Database::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::BLAST::Database::VERSION = '0.2';
+  $Bio::BLAST::Database::VERSION = '0.3';
 }
 # ABSTRACT: work with formatted BLAST databases
 
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use POSIX;
 
@@ -31,6 +30,8 @@ use List::Util qw/ min max /;
 use List::MoreUtils qw/ all any /;
 
 use Bio::BLAST::Database::Seq;
+
+use namespace::clean;
 
 
 use base qw/ Class::Accessor::Fast /;
@@ -62,10 +63,6 @@ sub open {
 
         my $perm_error = $self->check_format_permissions;
         croak $perm_error if $perm_error;
-    }
-
-    if($self->write and my @files = $self->list_files ) {
-        warn (map "$_\n", "already present:", map " - $_", @files);
     }
 
     # set some of our attrs from the existing files

@@ -5,6 +5,7 @@ META.json
 META.yml
 Makefile.PL
 README
+README.md
 dist.ini
 lib/Bio/BLAST/Database.pm
 lib/Bio/BLAST/Database/Seq.pm
