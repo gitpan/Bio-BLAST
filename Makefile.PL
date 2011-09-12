@@ -48,7 +48,7 @@ my %WriteMakefileArgs = (
     'POSIX' => '0',
     'namespace::clean' => '0'
   },
-  'VERSION' => '0.3',
+  'VERSION' => '0.4',
   'test' => {
     'TESTS' => 't/*.t'
   }

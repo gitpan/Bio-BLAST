@@ -3,7 +3,7 @@ BEGIN {
   $Bio::BLAST::Database::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::BLAST::Database::VERSION = '0.3';
+  $Bio::BLAST::Database::VERSION = '0.4';
 }
 # ABSTRACT: work with formatted BLAST databases
 
@@ -22,7 +22,7 @@ use File::Basename;
 use File::Copy;
 use File::Path;
 use File::Slurp qw/slurp/;
-use File::Spec::Functions qw/splitdir catdir/;
+use File::Spec::Functions qw/ splitdir catdir devnull /;
 
 use IPC::System::Simple 'systemx';
 
@@ -236,7 +236,7 @@ sub format_from_file {
            -i => $seqfile,
            -n => $new_ffbn,
            ($title ? (-t => $title) : ()),
-           -l => '/dev/null',
+           -l => devnull(),
            -o => $args{indexed_seqs}      ? 'T' : 'F',
            -p => $self->type eq 'protein' ? 'T' : 'F',
          );
@@ -276,7 +276,7 @@ sub format_from_file {
   #delete any old files that were not overwritten
   if(@oldfiles) {
     unlink @oldfiles;
-    carp "WARNING: these files for database ".$self->file_base." are no longer used and have been removed:\n",map {"-$_\n"} @oldfiles;
+    carp "WARNING: these files for database ".$self->full_file_basename." are no longer used and have been removed:\n",map {"-$_\n"} @oldfiles;
   }
 
 
@@ -571,8 +571,8 @@ Each object of this class represents an NCBI-formatted sequence
 database on disk, which is a set of files, the exact structure of
 which varies a bit with the type and size of the sequence set.
 
-This is mostly an object-oriented wrapper for using C<fastacmd> and
-C<formatdb>.
+This is mostly an object-oriented wrapper for using NCBI's C<fastacmd>
+and C<formatdb> tools.
 
 =head1 ATTRIBUTES
 

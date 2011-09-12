@@ -6,7 +6,7 @@ BEGIN {
   $Bio::BLAST::Database::Seq::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::BLAST::Database::Seq::VERSION = '0.3';
+  $Bio::BLAST::Database::Seq::VERSION = '0.4';
 }
 
 # ABSTRACT: lazy-loading sequence from a BLAST database
